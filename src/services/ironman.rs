@@ -1,8 +1,9 @@
 use actix_web::{get, HttpResponse, Responder, Result};
+use cached::proc_macro::cached;
 use reqwest::Url;
 use serde_derive::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct IronmanApiValue {
     values: Vec<Vec<String>>,
 }
@@ -21,14 +22,7 @@ struct IronmanApiType {
 
 #[get("/ironman")]
 pub async fn get_ironmans() -> Result<impl Responder> {
-    let url = Url::parse("https://sheets.googleapis.com/v4/spreadsheets/1yLtxUETnuF3UZLmypYkAK6Vj4PE9Fo_BT-WsA4oE_YU/values/Race-Catalog?key=AIzaSyC9s2sNhwUZOUXJfnyt-cD4k4nUyY-3HBs").unwrap();
-
-    let query = reqwest::get(url)
-        .await
-        .unwrap()
-        .json::<IronmanApiValue>()
-        .await
-        .unwrap();
+    let query = get_ironman_datas().await;
 
     let mut values: Vec<IronmanApiType> = Vec::new();
 
@@ -62,4 +56,16 @@ pub async fn get_ironmans() -> Result<impl Responder> {
     }
 
     Ok(HttpResponse::Ok().json(values))
+}
+
+#[cached]
+async fn get_ironman_datas() -> IronmanApiValue {
+    let url = Url::parse("https://sheets.googleapis.com/v4/spreadsheets/1yLtxUETnuF3UZLmypYkAK6Vj4PE9Fo_BT-WsA4oE_YU/values/Race-Catalog?key=AIzaSyC9s2sNhwUZOUXJfnyt-cD4k4nUyY-3HBs").unwrap();
+
+    return reqwest::get(url)
+        .await
+        .unwrap()
+        .json::<IronmanApiValue>()
+        .await
+        .unwrap();
 }
