@@ -22,7 +22,7 @@ pub async fn get_challenges() -> Result<impl Responder> {
     Ok(HttpResponse::Ok().json(query))
 }
 
-#[cached]
+#[cached(time = 3600)]
 async fn get_challenge_datas() -> Vec<ChallengeApiType> {
     let url = Url::parse("https://www.challenge-family.com/races/").unwrap();
 

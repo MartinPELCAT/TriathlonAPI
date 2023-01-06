@@ -58,7 +58,7 @@ pub async fn get_ironmans() -> Result<impl Responder> {
     Ok(HttpResponse::Ok().json(values))
 }
 
-#[cached]
+#[cached(time = 3600)]
 async fn get_ironman_datas() -> IronmanApiValue {
     let url = Url::parse("https://sheets.googleapis.com/v4/spreadsheets/1yLtxUETnuF3UZLmypYkAK6Vj4PE9Fo_BT-WsA4oE_YU/values/Race-Catalog?key=AIzaSyC9s2sNhwUZOUXJfnyt-cD4k4nUyY-3HBs").unwrap();
 
