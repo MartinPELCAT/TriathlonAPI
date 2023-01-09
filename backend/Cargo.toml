@@ -1,0 +1,19 @@
+[package]
+name = "triathlon_api"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "4"
+reqwest = { version = "0.11", features = ["json"] }
+tokio = { version = "1", features = ["full"] }
+serde = "1.0.119"
+serde_json = "1.0.61"
+serde_derive = "1.0.119"
+chrono = {version = "0.4.23", features = ["serde", "rustc-serialize"]}
+cached = "0.42.0"
+scraper = "0.14.0"
+diesel = { version = "2.0.2", features = ["postgres"] }
+dotenvy = "0.15.6"
